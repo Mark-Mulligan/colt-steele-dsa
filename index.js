@@ -46,4 +46,14 @@ const insertionSort = (array) => {
   return array;
 };
 
-console.log(selectionSort([16, 17, 5, 3, 12, 12]));
+const getDataFromMonthlyData = (date) => {
+  let year = Number(date.slice(0, 4));
+  let month = Number(date.slice(4)) - 1;
+
+  console.log(year);
+  console.log(month);
+  let dateObj = new Date(year, month);
+  return dateObj.getTime();
+};
+
+console.log(getDataFromMonthlyData("202209"));
