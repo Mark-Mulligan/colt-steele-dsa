@@ -1,59 +1,90 @@
-const bubbleSort = (array) => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    for (let j = 0; j < i; j++) {
-      if (array[j] > array[j + 1]) {
-        let temp = array[j];
-        array[j] = array[j + 1];
-        array[j + 1] = temp;
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+    this.prev = null;
+  }
+}
+
+class DoublyLinkedList {
+  constructor() {
+    this.length = 0;
+    this.head = null;
+    this.tail = null;
+  }
+
+  push(val) {
+    let newNode = new Node(val);
+
+    if (this.length === 0) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      let previousNode = this.tail;
+      previousNode.next = newNode;
+      newNode.prev = previousNode;
+      this.tail = newNode;
+    }
+
+    this.length++;
+    return this;
+  }
+
+  unshift(val) {
+    let newNode = new Node(val);
+
+    if (this.length === 0) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      let nextNode = this.head;
+      newNode.next = nextNode;
+      nextNode.prev = newNode;
+      this.head = newNode;
+    }
+
+    this.length++;
+    return this;
+  }
+
+  shift() {
+    if (this.length === 0) return undefined;
+    let removedNode = this.head;
+    if (this.length === 1) {
+      this.head = null;
+      this.tail = null;
+      this.length--;
+      return removedNode;
+    }
+
+    this.head = removedNode.next;
+    this.length--;
+    return removedNode;
+  }
+
+  get(index) {
+    if (index < 0 || index >= this.length) return null;
+    if (index <= this.length / 2) {
+      let count = 0;
+      let currentNode = this.head;
+      while (count !== index) {
+        currentNode = currentNode.next;
+        count++;
       }
-    }
-  }
-
-  return array;
-};
-
-const selectionSort = (array) => {
-  for (let i = 0; i < array.length; i++) {
-    let lowest = i;
-
-    for (let j = i + 1; j < array.length; j++) {
-      if (array[j] < array[lowest]) {
-        lowest = j;
+      return currentNode.val;
+    } else {
+      let count = this.length - 1;
+      let currentNode = this.tail;
+      while (count !== index) {
+        currentNode = currentNode.prev;
+        count--;
       }
-    }
-
-    if (lowest !== i) {
-      let temp = array[lowest];
-      array[lowest] = array[i];
-      array[i] = temp;
+      return currentNode.val;
     }
   }
+}
 
-  return array;
-};
-
-const insertionSort = (array) => {
-  let currentVal;
-  for (let i = 1; i < array.length; i++) {
-    currentVal = array[i];
-    for (var j = i - 1; j >= 0 && array[j] > currentVal; j--) {
-      array[j + 1] = array[j];
-    }
-
-    array[j + 1] = currentVal;
-  }
-
-  return array;
-};
-
-const getDataFromMonthlyData = (date) => {
-  let year = Number(date.slice(0, 4));
-  let month = Number(date.slice(4)) - 1;
-
-  console.log(year);
-  console.log(month);
-  let dateObj = new Date(year, month);
-  return dateObj.getTime();
-};
-
-console.log(getDataFromMonthlyData("202209"));
+const list = new DoublyLinkedList();
+list.push(5).push(10).push(15).push(20);
+console.log(list.get(0));
+console.log(list.get(1));
