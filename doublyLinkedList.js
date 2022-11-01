@@ -74,8 +74,78 @@ class DoublyLinkedList {
     this.length++;
     return this;
   }
+
+  get(index) {
+    if (index < 0 || index >= this.length) return null;
+    if (index <= this.length / 2) {
+      let count = 0;
+      let current = this.head;
+      while (count != index) {
+        current = current.next;
+        count++;
+      }
+      return current;
+    } else {
+      let count = this.length - 1;
+      let current = this.tail;
+      while (count != index) {
+        current = current.previous;
+        count--;
+      }
+      return current;
+    }
+  }
+
+  set(index, val) {
+    let targetNode = get(index);
+    if (targetNode !== null) {
+      targetNode.val = val;
+      return true;
+    }
+
+    return false;
+  }
+
+  insert(index, val) {
+    if (index < 0 || index >= this.length) return false;
+    if (index === 0) return !this.unshift(val);
+    if (index === this.length - 1) return !this.push(val);
+
+    let newNode = new Node(val);
+    let previousNode = this.get(index - 1);
+    let nextNode = previousNode.next;
+
+    newNode.next = nextNode;
+    newNode.previous = previousNode;
+    previousNode.next = newNode;
+    nextNode.previous = newNode;
+    this.length++;
+    return true;
+  }
+
+  remove(index) {
+    if (index < 0 || index >= this.length) return undefined;
+    if (index === 0) return this.shift();
+    if (index === this.length - 1) return this.pop();
+
+    let foundNode = this.get(index);
+    let previousNode = foundNode.previous;
+    let nextNode = foundNode.next;
+
+    previousNode.next = nextNode;
+    nextNode.previous = previousNode;
+    this.length--;
+
+    foundNode.next = null;
+    foundNode.previous = null;
+    return foundNode;
+  }
 }
 
 const list = new DoublyLinkedList();
-console.log(list.unshift("Hagrid"));
-console.log(list.unshift(10));
+list.push(2);
+list.push(4);
+list.push(6);
+
+console.log(list.remove(1));
+console.log(list);
